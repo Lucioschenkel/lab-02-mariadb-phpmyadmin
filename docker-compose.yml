@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  lab_02:
+
+volumes:
+  mariadb_vol:
+
+services:
+  phpMyAdmin:
+    image: phpmyadmin:5.2.1
+    restart: always
+    depends_on:
+      - mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - PMA_HOST=mariadb
+    networks:
+      - lab_02
+    ports:
+      - '8080:80'
+    
+  mariadb:
+    image: mariadb:11.2.2
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    networks:
+      - lab_02
+    volumes:
+      - mariadb_vol:/var/lib/mysql
